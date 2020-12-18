@@ -1,13 +1,59 @@
 <template>
-  <b-container>
-    <b-row>
-      <b-col>
-        <div>
-          <!-- Pilot -->
-        </div>
+  <b-container class="my-container">
+    <b-row class="my-row">
+      <b-col cols="6" class="my-col">
+        <b-container>
+          Salud de los pilotos
+          <b-row class="my-row">
+            <b-col cols="4" class="my-col"> Heart Rate </b-col>
+            <b-col cols="8" class="my-col"> Grafic </b-col>
+          </b-row>
+          <b-row class="my-row">
+            <b-col cols="4" class="my-col"> Spo2 </b-col>
+            <b-col cols="8" class="my-col"> Grafic</b-col>
+          </b-row>
+          <b-row class="my-row">
+            <b-col cols="4" class="my-col"> Body Tempeture </b-col>
+            <b-col cols="8" class="my-col"> Grafic</b-col>
+          </b-row>
+        </b-container>
+        <b-container>
+          Estatus del Ambiente
+          <b-row class="my-row">
+            <b-col cols="4" class="my-col"> Presión atmosférica </b-col>
+            <b-col cols="8" class="my-col"> Grafic </b-col>
+          </b-row>
+          <b-row class="my-row">
+            <b-col cols="4" class="my-col"> Humedad </b-col>
+            <b-col cols="8" class="my-col"> Grafic</b-col>
+          </b-row>
+          <b-row class="my-row">
+            <b-col cols="4" class="my-col"> Temperatura </b-col>
+            <b-col cols="8" class="my-col"> Grafic</b-col>
+          </b-row>
+          <b-row class="my-row">
+            <b-col cols="4" class="my-col"> UV Intensidad </b-col>
+            <b-col cols="8" class="my-col"> Grafic</b-col>
+          </b-row>
+        </b-container>
+        <b-container>
+          Información del Rover
+          <b-row class="my-row">
+            <b-col cols="4" class="my-col"> Velocidad y fuerza </b-col>
+            <b-col cols="8" class="my-col"> Grafic </b-col>
+          </b-row>
+          <b-row class="my-row">
+            <b-col cols="4" class="my-col"> Localización GPS </b-col>
+            <b-col cols="8" class="my-col"> Grafic</b-col>
+          </b-row>
+          <!-- <b-row class="my-row">
+            <b-col cols="4" class="my-col"> Body Tempeture </b-col>
+            <b-col cols="8" class="my-col"> Grafic</b-col>
+          </b-row> -->
+        </b-container>
       </b-col>
-      <b-col>
-        <div>2 of 3</div>
+      <b-col cols="6" class="my-col">
+        <b-container class="my-container"> Video </b-container>
       </b-col>
     </b-row>
   </b-container>
@@ -90,16 +136,16 @@ export default {
 </script>
 
 <style>
-.container {
+/* .container {
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-}
+} */
 
-.title {
+/* .title {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: block;
@@ -107,17 +153,33 @@ export default {
   font-size: 100px;
   color: #35495e;
   letter-spacing: 1px;
-}
+} */
 
-.subtitle {
+/* .subtitle {
   font-weight: 300;
   font-size: 42px;
   color: #526488;
   word-spacing: 5px;
   padding-bottom: 15px;
+} */
+
+/* .links {
+  padding-top: 15px;
+} */
+
+body {
+  margin: 30px;
 }
 
-.links {
-  padding-top: 15px;
+.my-container {
+  border: 1px solid green;
+}
+
+.my-row {
+  border: 3px solid red;
+}
+
+.my-col {
+  border: 3px solid blue;
 }
 </style>
