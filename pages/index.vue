@@ -1,12 +1,20 @@
 <template>
   <b-container class="my-container">
     <b-row class="my-row">
-      <b-col cols="6" class="my-col">
+      <b-col cols="6">
         <b-container>
-          Salud de los pilotos
+          <h4 class="title">Salud de los pilotos</h4>
           <b-row class="my-row">
-            <b-col cols="4" class="my-col"> Heart Rate </b-col>
-            <b-col cols="8" class="my-col"> Grafic </b-col>
+            <b-col cols="4">
+              <h5 class="subtitle">Heart Rate</h5>
+            </b-col>
+            <b-col cols="8">
+              <h3 class="subtitle">Grafic</h3>
+              <div class="small shadow p-3 mb-5 bg-white rounded">
+                <line-chart :chart-data="datacollection"></line-chart>
+                <button class="btn-a27" @click="fillData()">Randomize</button>
+              </div>
+            </b-col>
           </b-row>
           <b-row class="my-row">
             <b-col cols="4" class="my-col"> Spo2 </b-col>
@@ -18,7 +26,8 @@
           </b-row>
         </b-container>
         <b-container>
-          Estatus del Ambiente
+          <h4 class="title">Estatus del Ambiente</h4>
+
           <b-row class="my-row">
             <b-col cols="4" class="my-col"> Presión atmosférica </b-col>
             <b-col cols="8" class="my-col"> Grafic </b-col>
@@ -37,7 +46,7 @@
           </b-row>
         </b-container>
         <b-container>
-          Información del Rover
+          <h4 class="title">Información del Rover</h4>
           <b-row class="my-row">
             <b-col cols="4" class="my-col"> Velocidad y fuerza </b-col>
             <b-col cols="8" class="my-col"> Grafic </b-col>
@@ -46,10 +55,6 @@
             <b-col cols="4" class="my-col"> Localización GPS </b-col>
             <b-col cols="8" class="my-col"> Grafic</b-col>
           </b-row>
-          <!-- <b-row class="my-row">
-            <b-col cols="4" class="my-col"> Body Tempeture </b-col>
-            <b-col cols="8" class="my-col"> Grafic</b-col>
-          </b-row> -->
         </b-container>
       </b-col>
       <b-col cols="6" class="my-col">
@@ -60,112 +65,72 @@
 </template>
 
 <script>
+import LineChart from "../components/LineChart";
+
 export default {
+  components: {
+    LineChart,
+  },
   data() {
     return {
-      barChartData: {
-        labels: [
-          "2019-06",
-          "2019-07",
-          "2019-08",
-          "2019-09",
-          "2019-10",
-          "2019-11",
-          "2019-12",
-          "2020-01",
-          "2020-02",
-          "2020-03",
-          "2020-04",
-          "2020-05",
-        ],
+      datacollection: null,
+    };
+  },
+  mounted() {
+    this.fillData();
+  },
+  methods: {
+    fillData() {
+      this.datacollection = {
+        labels: [this.getRandomInt(), this.getRandomInt()],
         datasets: [
           {
-            label: "Visits",
-            data: [10, 15, 20, 30, 40, 50, 60, 70, 34, 45, 11, 78, 45],
-            backgroundColor: "#003f5c",
+            label: "Data One",
+            backgroundColor: "#454ade",
+            data: [
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+            ],
           },
-          {
-            label: "Pages Views",
-            data: [30, 24, 57, 23, 68, 72, 25, 64, 133, 143, 165, 33, 56],
-            backgroundColor: "#2f4b7c",
-          },
-          {
-            label: "Users",
-            data: [45, 65, 30, 53, 34, 35, 26, 37, 34, 45, 67, 87, 98],
-            backgroundColor: "#665191",
-          },
+          // {
+          //   label: "Data One",
+          //   backgroundColor: "#020024",
+          //   data: [this.getRandomInt(), this.getRandomInt()],
+          // },
         ],
-      },
-      barChartOptions: {
-        responsive: true,
-        legend: {
-          display: false,
-        },
-        title: {
-          display: true,
-          text: "Google analytics data",
-          fontSize: 24,
-          fontColor: "#6b7280",
-        },
-        tooltips: {
-          backgroundColor: "#17BF62",
-        },
-        scales: {
-          xAxes: [
-            {
-              gridLines: {
-                display: false,
-              },
-            },
-          ],
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true,
-              },
-              gridLines: {
-                display: false,
-              },
-            },
-          ],
-        },
-      },
-    };
+      };
+    },
+    getRandomInt() {
+      return Math.floor(Math.random() * (10 - 5 + 1)) + 6;
+    },
   },
 };
 </script>
 
 <style>
-/* .container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-} */
-
-/* .title {
+.title {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
   display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-} */
+  font-weight: bold;
+  font-size: 24px;
+  color: #28313a;
+}
 
-/* .subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
+.subtitle {
+  font-family: "Segoe UI", Roboto;
+  font-size: 18px;
+  color: #28313a;
+  word-spacing: 1px;
   padding-bottom: 15px;
-} */
-
-/* .links {
-  padding-top: 15px;
-} */
+}
 
 body {
   margin: 30px;
@@ -181,5 +146,17 @@ body {
 
 .my-col {
   border: 3px solid blue;
+}
+
+.small {
+  max-width: 600px;
+}
+
+.btn-a27 {
+  background-color: transparent;
+  border-radius: 10px;
+  border: 2px solid #454ade;
+  padding: 10px 20px;
+  color: #28313a;
 }
 </style>
