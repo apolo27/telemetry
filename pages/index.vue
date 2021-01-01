@@ -61,18 +61,71 @@
         </b-container>
         <b-container>
           <h4 class="title">Estatus del Ambiente</h4>
-
-          <b-row class="my-row">
-            <b-col cols="4" class="my-col"> Presión atmosférica </b-col>
-            <b-col cols="8" class="my-col"> Grafic </b-col>
+          <b-row>
+            <b-col cols="4">
+              <h5 class="subtitle">Presión atmosférica</h5>
+              <div class="small shadow p-3 mb-5 bg-white rounded">
+                <p class="value-text color-atmospheric-p">
+                  {{ dataAtmosphericPressure }}
+                </p>
+              </div>
+            </b-col>
+            <b-col cols="8">
+              <h3 class="subtitle">Grafic</h3>
+              <div class="small shadow p-3 mb-5 bg-white rounded">
+                <line-chart :chart-data="dataAtmosphericPressureG"></line-chart>
+                <button
+                  class="btn-a27 btn-color-atmospheric-p"
+                  @click="fillDataAtmosphericPressureG()"
+                >
+                  Randomize
+                </button>
+              </div>
+            </b-col>
           </b-row>
-          <b-row class="my-row">
-            <b-col cols="4" class="my-col"> Humedad </b-col>
-            <b-col cols="8" class="my-col"> Grafic</b-col>
+          <b-row>
+            <b-col cols="4">
+              <h5 class="subtitle">Humedad</h5>
+              <div class="small shadow p-3 mb-5 bg-white rounded">
+                <p class="value-text color-humity">
+                  {{ dataHumidity }}
+                </p>
+              </div>
+            </b-col>
+            <b-col cols="8">
+              <h3 class="subtitle">Grafic</h3>
+              <div class="small shadow p-3 mb-5 bg-white rounded">
+                <line-chart :chart-data="dataHumidityG"></line-chart>
+                <button
+                  class="btn-a27 btn-color-humity"
+                  @click="fillDataHumidityG()"
+                >
+                  Randomize
+                </button>
+              </div>
+            </b-col>
           </b-row>
-          <b-row class="my-row">
-            <b-col cols="4" class="my-col"> Temperatura </b-col>
-            <b-col cols="8" class="my-col"> Grafic</b-col>
+          <b-row>
+            <b-col cols="4">
+              <h5 class="subtitle">Temperatura</h5>
+              <div class="small shadow p-3 mb-5 bg-white rounded">
+                <p class="value-text color-tempeture">
+                  {{ dataTempeture + `°C` }}
+                </p>
+              </div>
+            </b-col>
+            <b-col cols="8">
+              <h3 class="subtitle">Grafic</h3>
+              <div class="small shadow p-3 mb-5 bg-white rounded">
+                <line-chart :chart-data="dataTempetureG"></line-chart>
+                <button
+                  class="btn-a27 btn-color-tempeture"
+                  @click="fillDataTempetureG()"
+                >
+                  Randomize
+                </button>
+              </div>
+            </b-col>
           </b-row>
           <b-row class="my-row">
             <b-col cols="4" class="my-col">
@@ -121,6 +174,12 @@ export default {
       dataSpo2G: null,
       dataBodyTemp: null,
       dataBodyTempG: null,
+      dataAtmosphericPressure: null,
+      dataAtmosphericPressureG: null,
+      dataHumidity: null,
+      dataHumidityG: null,
+      dataTempeture: null,
+      dataTempetureG: null,
       dataBarUV: null,
       barChartOptions: null,
     };
@@ -131,6 +190,12 @@ export default {
       this.fillDataSpo2G(),
       this.fillDataBodyTemp(),
       this.fillDataBodyTempG(),
+      this.fillDataAtmosphericPressure(),
+      this.fillDataAtmosphericPressureG(),
+      this.fillDataHumidity(),
+      this.fillDataHumidityG(),
+      this.fillDataTempeture(),
+      this.fillDataTempetureG(),
       this.fillBarUV(),
       this.fillBarChartOptions();
   },
@@ -206,6 +271,92 @@ export default {
         ],
       };
     },
+    fillDataAtmosphericPressureG() {
+      this.dataAtmosphericPressureG = {
+        labels: [
+          this.getRandomInt(),
+          this.getRandomInt(),
+          this.getRandomInt(),
+          this.getRandomInt(),
+        ],
+        datasets: [
+          {
+            label: "Data",
+            backgroundColor: "#3064FF",
+            data: [
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+            ],
+          },
+        ],
+      };
+    },
+    fillDataHumidityG() {
+      this.dataHumidityG = {
+        labels: [
+          this.getRandomInt(),
+          this.getRandomInt(),
+          this.getRandomInt(),
+          this.getRandomInt(),
+          this.getRandomInt(),
+          this.getRandomInt(),
+          this.getRandomInt(),
+          this.getRandomInt(),
+          this.getRandomInt(),
+          this.getRandomInt(),
+          this.getRandomInt(),
+        ],
+        datasets: [
+          {
+            label: "Data",
+            backgroundColor: "#3EB04B",
+            data: [
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+            ],
+          },
+        ],
+      };
+    },
+    fillDataTempetureG() {
+      this.dataTempetureG = {
+        labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        datasets: [
+          {
+            label: "Data",
+            backgroundColor: "#E77716",
+            data: [
+              this.getRandomTempeture(),
+              this.getRandomTempeture(),
+              this.getRandomTempeture(),
+              this.getRandomTempeture(),
+              this.getRandomTempeture(),
+              this.getRandomTempeture(),
+              this.getRandomTempeture(),
+              this.getRandomTempeture(),
+              this.getRandomTempeture(),
+              this.getRandomTempeture(),
+            ],
+          },
+        ],
+      };
+    },
     fillBarUV() {
       this.dataBarUV = {
         labels: ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00"],
@@ -241,11 +392,23 @@ export default {
     getRandomInt() {
       return Math.floor(Math.random() * (10 - 5 + 1)) + 6;
     },
+    getRandomTempeture() {
+      return Math.floor(Math.random() * 50) + 20;
+    },
     fillDataSpo2() {
       this.dataSpo2 = this.getRandomInt();
     },
     fillDataBodyTemp() {
       this.dataBodyTemp = this.getRandomInt();
+    },
+    fillDataAtmosphericPressure() {
+      this.dataAtmosphericPressure = this.getRandomInt();
+    },
+    fillDataHumidity() {
+      this.dataHumidity = this.getRandomInt();
+    },
+    fillDataTempeture() {
+      this.dataTempeture = this.getRandomTempeture();
     },
     fillBarChartOptions() {
       this.barChartOptions = {
@@ -343,6 +506,18 @@ body {
 .btn-color-body-t {
   border: 2px solid #f26f8b;
 }
+
+.btn-color-atmospheric-p {
+  border: 2px solid #3064ff;
+}
+.btn-color-humity {
+  border: 2px solid #3eb04b;
+}
+
+.btn-color-tempeture {
+  border: 2px solid #e77716;
+}
+
 .value-text {
   text-align: center;
   font-family: "Segoe UI", Roboto;
@@ -359,5 +534,16 @@ body {
 }
 .color-body-t {
   color: #f26f8b;
+}
+
+.color-atmospheric-p {
+  color: #3064ff;
+}
+
+.color-humity {
+  color: #3eb04b;
+}
+.color-tempeture {
+  color: #e77716;
 }
 </style>
