@@ -75,8 +75,15 @@
             <b-col cols="8" class="my-col"> Grafic</b-col>
           </b-row>
           <b-row class="my-row">
-            <b-col cols="4" class="my-col"> UV Intensidad </b-col>
-            <b-col cols="8" class="my-col"> Grafic</b-col>
+            <b-col cols="4" class="my-col">
+              <h5 class="subtitle">UV Intensidad</h5>
+            </b-col>
+            <b-col cols="8" class="my-col">
+              <h3 class="subtitle">Grafic</h3>
+              <div class="small shadow p-3 mb-5 bg-white rounded">
+                <bar-chart :chart-data="dataBarUV" />
+              </div>
+            </b-col>
           </b-row>
         </b-container>
         <b-container>
@@ -100,10 +107,12 @@
 
 <script>
 import LineChart from "../components/LineChart";
+import BarChart from "../components/BarChart";
 
 export default {
   components: {
     LineChart,
+    BarChart,
   },
   data() {
     return {
@@ -112,6 +121,8 @@ export default {
       dataSpo2G: null,
       dataBodyTemp: null,
       dataBodyTempG: null,
+      dataBarUV: null,
+      barChartOptions: null,
     };
   },
   mounted() {
@@ -119,7 +130,9 @@ export default {
       this.fillDataSpo2(),
       this.fillDataSpo2G(),
       this.fillDataBodyTemp(),
-      this.fillDataBodyTempG();
+      this.fillDataBodyTempG(),
+      this.fillBarUV(),
+      this.fillBarChartOptions();
   },
   methods: {
     fillData() {
@@ -193,6 +206,38 @@ export default {
         ],
       };
     },
+    fillBarUV() {
+      this.dataBarUV = {
+        labels: ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00"],
+        datasets: [
+          {
+            label: "Baja",
+            data: [1, 2, 1, 1, 1, 1, 2],
+            backgroundColor: "#3EB04B",
+          },
+          {
+            label: "Moderada",
+            data: [3, 3, 3, 4, 5, 4, 5, 4],
+            backgroundColor: "#EBCE1F",
+          },
+          {
+            label: "Alta",
+            data: [6, 7, 8, 6, 7, 8, 6],
+            backgroundColor: "#E77716",
+          },
+          {
+            label: "Muy Alta",
+            data: [8, 9, 10, 8, 9, 9, 8, 10],
+            backgroundColor: "#BF302C",
+          },
+          {
+            label: "Extremadamente alta",
+            data: [0, 0, 0, 0, 0, 11, 0, 0],
+            backgroundColor: "#7044D4",
+          },
+        ],
+      };
+    },
     getRandomInt() {
       return Math.floor(Math.random() * (10 - 5 + 1)) + 6;
     },
@@ -201,6 +246,42 @@ export default {
     },
     fillDataBodyTemp() {
       this.dataBodyTemp = this.getRandomInt();
+    },
+    fillBarChartOptions() {
+      this.barChartOptions = {
+        responsive: true,
+        legend: {
+          display: true,
+        },
+        // title: {
+        //   display: true,
+        //   text: "Google analytics data",
+        //   fontSize: 24,
+        //   fontColor: "#6b7280",
+        // },
+        // tooltips: {
+        //   backgroundColor: "#17BF62",
+        // },
+        scales: {
+          xAxes: [
+            {
+              gridLines: {
+                display: false,
+              },
+            },
+          ],
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true,
+              },
+              gridLines: {
+                display: false,
+              },
+            },
+          ],
+        },
+      };
     },
   },
 };
