@@ -161,6 +161,7 @@
 <script>
 import LineChart from "../components/LineChart";
 import BarChart from "../components/BarChart";
+import { db } from '../firebaseMain'
 
 export default {
   components: {
@@ -186,45 +187,31 @@ export default {
   },
   mounted() {
     this.fillData(),
-      this.fillDataSpo2(),
-      this.fillDataSpo2G(),
-      this.fillDataBodyTemp(),
-      this.fillDataBodyTempG(),
-      this.fillDataAtmosphericPressure(),
-      this.fillDataAtmosphericPressureG(),
-      this.fillDataHumidity(),
-      this.fillDataHumidityG(),
-      this.fillDataTempeture(),
-      this.fillDataTempetureG(),
-      this.fillBarUV(),
-      this.fillBarChartOptions();
+    this.fillDataSpo2(),
+    this.fillDataSpo2G(),
+    this.fillDataBodyTemp(),
+    this.fillDataBodyTempG(),
+    this.fillDataAtmosphericPressure(),
+    this.fillDataAtmosphericPressureG(),
+    this.fillDataHumidity(),
+    this.fillDataHumidityG(),
+    this.fillDataTempeture(),
+    this.fillDataTempetureG(),
+    this.fillBarUV(),
+    this.fillBarChartOptions();
   },
   methods: {
-    fillData() {
+    async fillData() {
       this.datacollection = {
-        labels: [this.getRandomInt(), this.getRandomInt()],
+        labels: [0, 50, 60, 70, 80, 90],
         datasets: [
           {
-            label: "Data One",
-            backgroundColor: "#454ade",
-            data: [
-              this.getRandomInt(),
-              this.getRandomInt(),
-              this.getRandomInt(),
-              this.getRandomInt(),
-              this.getRandomInt(),
-              this.getRandomInt(),
-              this.getRandomInt(),
-              this.getRandomInt(),
-            ],
-          },
-          // {
-          //   label: "Data One",
-          //   backgroundColor: "#020024",
-          //   data: [this.getRandomInt(), this.getRandomInt()],
-          // },
-        ],
-      };
+            label : "Data one",
+            backgroundColor : "#454ade",
+            data: await this.getAllValues()
+          }
+        ]
+      }
     },
     fillDataSpo2G() {
       this.dataSpo2G = {
@@ -388,6 +375,23 @@ export default {
           },
         ],
       };
+    },
+    async getAllValues() {
+      var data = [];
+      await db.once('value').then((snapshot) => {
+        const records = snapshot.val();
+        //console.log(records);
+        for(const recordId of Object.getOwnPropertyNames(records)){
+            //console.log(records[recordId]["pilot"]["heartRate"]);
+            data.push(records[recordId]["pilot"]["heartRate"]);
+          }
+        //console.log(Object.getOwnPropertyNames(records))
+        //console.log(records['-MQ34A3H4rcJZF3VqUQX']);
+        //this.datacollection.datasets = data;
+        });
+      console.log(data);
+      console.log("Checkpoint");
+      return data;
     },
     getRandomInt() {
       return Math.floor(Math.random() * (10 - 5 + 1)) + 6;
