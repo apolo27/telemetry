@@ -31,6 +31,41 @@
             </b-col>
           </b-row>
         </b-container>
+        <b-container>
+          <h4 class="title">Ambiente</h4>
+          <b-row>
+            <b-col cols="3">
+              <h5 class="subtitle">Humedad</h5>
+              <div class="small shadow p-3 mb-5 bg-white rounded">
+                <p class="value-text color-heart">{{envData.lastHumidity}}%</p>
+              </div>
+            </b-col>
+            <b-col cols="3">
+              <h5 class="subtitle">Presión</h5>
+              <div class="small shadow p-3 mb-5 bg-white rounded">
+                <p class="value-text color-heart">{{envData.lastPressure}} Pa</p>
+              </div>
+            </b-col>
+            <b-col cols="3">
+              <h5 class="subtitle">Temperature</h5>
+              <div class="small shadow p-3 mb-5 bg-white rounded">
+                <p class="value-text color-heart">{{envData.lastTemperature}} °C</p>
+              </div>
+            </b-col>
+            <b-col cols="3">
+              <h5 class="subtitle">UV</h5>
+              <div class="small shadow p-3 mb-5 bg-white rounded">
+                <p class="value-text color-heart">{{envData.lastuv}} nm</p>
+              </div>
+            </b-col>
+            <b-col cols="12">
+              <h3 class="subtitle">Grafic</h3>
+              <div class="small shadow p-3 mb-5 bg-white rounded">
+                <line-chart :chart-data="envData.envChartData"></line-chart>
+              </div>
+            </b-col>
+          </b-row>
+        </b-container>
       </b-col>
       <b-col cols="6" class="my-col">
         <b-container class="my-container"> Video </b-container>
@@ -43,6 +78,15 @@
 import LineChart from "../components/LineChart";
 import { db } from '../firebaseMain'
 
+class dataSet{
+  constructor(label, bgColor, dataSet = []){
+    this.label = label;
+    this.backgroundColor = "rgba(0, 0, 0, 0)"
+    this.borderColor = bgColor;
+    this.data = dataSet;
+  }
+}
+
 export default {
   components: {
     LineChart,
@@ -53,68 +97,83 @@ export default {
         lastHeartRate: 0,
         lastOxigenLevel: 0,
         lastTemperature: 0,
+        braceletBattery: 0,
         pilotChartData: {}
+      },
+      envData:{
+        lastHumidity: 0,
+        lastPressure: 0,
+        lastTemperature: 0,
+        lastuv: 0, 
+        envChartData: {}
+      },
+      roverData:{
+        gps: [],
+        battery: 0,
+        rpm: 0,
       },
     };
   },
   mounted() {
-    this.populatePilotData();
+    this.getDataDB();
   },
   methods: {
 
-    async populatePilotData() {
-      var data = await this.getPilotDataFromDB();
-      console.log(data);
-      this.pilotData.lastHeartRate = data[2].heartRate;
-      this.pilotData.lastOxigenLevel = data[2].oxigenLevel;
-      this.pilotData.lastTemperature = data[2].temperature;
-      this.pilotData.pilotChartData = {
-        labels: data[0],
-        datasets: data[1],
+    async getDataDB(){
+      await db.once('value').then((snapshot) => {
+        let records = snapshot.val();
+        const key = Object.getOwnPropertyNames(records)[0];
+        records = records[key];
+        const chartLabels = records["time_"];
+        this.populatePilotData(records, chartLabels);
+        this.populateEnvData(records, chartLabels);
+        this.populateRoverData(records, chartLabels);
+        });
+    },
+
+    async populateEnvData(records, chartLabels){
+      this.envData.envChartData = {
+        labels: chartLabels,
+        datasets: [
+          new dataSet("Temperature", "rgba(255, 0, 0, 1)", records["enviroment_temperature"]),
+          new dataSet("Pressure", "rgba(0, 0, 255, 1)", records["enviroment_pressure"]),
+          new dataSet("Humidity", "rgba(0, 255, 0, 1)", records["enviroment_humidity"]),
+          new dataSet("UV", "rgba(102, 51, 153, 1)", records["enviroment_uv"])
+        ],
         options: {
           responsive: true,
           maintainAspectRatio: false
         }
-      }
+      };
+      this.envData.lastTemperature = records["enviroment_temperature"][records["enviroment_temperature"].length - 1];
+      this.envData.lastPressure = records["enviroment_pressure"][records["enviroment_pressure"].length - 1];
+      this.envData.lastHumidity = records["enviroment_humidity"][records["enviroment_humidity"].length - 1];
+      this.envData.lastuv = records["enviroment_uv"][records["enviroment_uv"].length - 1];
+    },
+    
+    async populateRoverData(records, chartLabels){
+      this.roverData.gps = records["rover_gps"][records["rover_gps"].length - 1];
+      this.roverData.battery = records["rover_roverBattery"][records["rover_roverBattery"].length - 1];
+      this.roverData.rpm = records["rover_rpm"][records["rover_rpm"].length - 1];
     },
 
-    async getPilotDataFromDB() {
-
-      class dataSet{
-        constructor(label, bgColor, dataSet = []){
-          this.label = label;
-          this.backgroundColor = "rgba(0, 0, 0, 0)"
-          this.borderColor = bgColor;
-          this.data = dataSet;
+    async populatePilotData(records, chartLabels){
+      this.pilotData.pilotChartData = {
+        labels: chartLabels,
+        datasets: [
+          new dataSet("Heart rate", "rgba(255, 0, 0, 1)", records["pilot_heartRate"]),
+          new dataSet("Oxigen level", "rgba(0, 0, 255, 1)", records["pilot_oxigenLevel"]),
+          new dataSet("Temperature", "rgba(0, 255, 0, 1)", records["pilot_temperature"])
+        ],
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
         }
-      }
-
-      let labels = [];
-      let lastVal = {
-        heartRate: 0,
-        oxigenLevel: 0,
-        temperature: 0 
       };
-
-      let dataSets = [
-        new dataSet("Heart Rate", "rgba(255, 0, 0, 1)"),
-        new dataSet("Oxigen level", "rgba(0, 0, 255, 1)"),
-        new dataSet("Temperature", "rgba(0, 255, 0, 1)")];
-
-      await db.once('value').then((snapshot) => {
-        const records = snapshot.val();
-        for(const recordId of Object.getOwnPropertyNames(records)){
-            labels.push(records[recordId]["date"].substr(11, 8));
-            dataSets[0].data.push(records[recordId]["pilot"]["heartRate"]);
-            dataSets[1].data.push(records[recordId]["pilot"]["oxigeneLevel"]);
-            dataSets[2].data.push(records[recordId]["pilot"]["temperature"]);
-          }
-        lastVal.heartRate = dataSets[0].data[dataSets[0].data.length - 1];
-        lastVal.oxigenLevel = dataSets[1].data[dataSets[1].data.length - 1];
-        lastVal.temperature = dataSets[2].data[dataSets[2].data.length - 1];
-        });
-      
-      return [labels, dataSets, lastVal];
+      this.pilotData.lastHeartRate = records["pilot_heartRate"][records["pilot_heartRate"].length - 1];
+      this.pilotData.lastOxigenLevel = records["pilot_oxigenLevel"][records["pilot_oxigenLevel"].length - 1];
+      this.pilotData.lastTemperature = records["pilot_temperature"][records["pilot_temperature"].length - 1];
+      this.pilotData.braceletBattery = records["pilot_braceletBattery"][records["pilot_braceletBattery"].length - 1];
     },
   },
 };

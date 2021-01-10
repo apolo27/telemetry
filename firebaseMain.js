@@ -16,7 +16,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
-var db = firebase.database().ref("records/");
+var db = firebase.database().ref("record/");
 
 // collection references
 /*
