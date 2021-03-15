@@ -5,88 +5,78 @@
         <b-container>
           <h4 class="title">Salud de los pilotos</h4>
           <b-row>
-            <b-col cols="4">
-              <h5 class="subtitle">Heart Rate</h5>
+            <b-col cols="6">
               <div class="shadow-lg p-3 mb-5 background-heart rounded">
                 <p class="value-text color-white">
-                  {{ pilotData.lastHeartRate }} bpm
+                  {{0}} bpm
                 </p>
               </div>
             </b-col>
-            <b-col cols="4">
-              <h5 class="subtitle">Oxigen level</h5>
-              <div class="small shadow p-3 mb-5 background-spo2 rounded">
+            <b-col cols="6">
+              <div class="shadow-lg p-3 mb-5 background-heart rounded">
                 <p class="value-text color-white">
-                  {{ pilotData.lastOxigenLevel }} mmHg
+                  {{0}} bpm
                 </p>
-              </div>
-            </b-col>
-            <b-col cols="4">
-              <h5 class="subtitle">Temperature</h5>
-              <div class="small shadow p-3 mb-5 background-body-t rounded">
-                <p class="value-text color-white">
-                  {{ pilotData.lastTemperature }} °C
-                </p>
-              </div>
-            </b-col>
-            <b-col cols="12">
-              <h3 class="subtitle">Grafic</h3>
-              <div class="shadow-lg p-3 mb-5 rounded">
-                <div id="myChartColor">
-                  <line-chart
-                    :chart-data="pilotData.pilotChartData"
-                  ></line-chart>
-                </div>
               </div>
             </b-col>
           </b-row>
-        </b-container>
-        <b-container>
-          <h4 class="title">Ambiente</h4>
           <b-row>
-            <b-col cols="3">
-              <h5 class="subtitle">Humedad</h5>
-              <div class="small shadow p-3 mb-5 rounded">
-                <p class="value-text color-heart">
-                  {{ envData.lastHumidity }}%
+            <div class="shadow-lg p-3 mb-5 rounded">
+              <div id="myChartColor">
+                <line-chart
+                  :chart-data="pilotData.pilotChartData"
+                ></line-chart>
+              </div>
+            </div>
+          </b-row>
+          <h4 class="title">Data del ambiente</h4>
+          <b-row>
+            <b-col cols="6">
+              <div class="shadow-lg p-3 mb-5 background-heart rounded">
+                <p class="value-text color-white">
+                  {{0}} bpm
                 </p>
               </div>
             </b-col>
-            <b-col cols="3">
-              <h5 class="subtitle">Presión</h5>
-              <div class="small shadow p-3 mb-5 bg-white rounded">
-                <p class="value-text color-heart">
-                  {{ envData.lastPressure }} Pa
+            <b-col cols="6">
+              <div class="shadow-lg p-3 mb-5 background-heart rounded">
+                <p class="value-text color-white">
+                  {{0}} bpm
                 </p>
               </div>
             </b-col>
-            <b-col cols="3">
-              <h5 class="subtitle">Temperature</h5>
-              <div class="small shadow p-3 mb-5 bg-white rounded">
-                <p class="value-text color-heart">
-                  {{ envData.lastTemperature }} °C
+          </b-row>
+          <b-row>
+            <b-col cols="6">
+              <div class="shadow-lg p-3 mb-5 background-heart rounded">
+                <p class="value-text color-white">
+                  {{0}} bpm
                 </p>
               </div>
             </b-col>
-            <b-col cols="3">
-              <h5 class="subtitle">UV</h5>
-              <div class="small shadow p-3 mb-5 bg-white rounded">
-                <p class="value-text color-heart">{{ envData.lastuv }} nm</p>
+            <b-col cols="6">
+              <div class="shadow-lg p-3 mb-5 background-heart rounded">
+                <p class="value-text color-white">
+                  {{0}} bpm
+                </p>
               </div>
             </b-col>
-            <b-col cols="12">
-              <h3 class="subtitle">Grafic</h3>
-              <div class="small shadow p-3 mb-5 bg-white rounded">
-                <line-chart :chart-data="envData.envChartData"></line-chart>
+          </b-row>
+          <b-row>
+            <div class="shadow-lg p-3 mb-5 rounded">
+              <div id="myChartColor">
+                <line-chart
+                  :chart-data="pilotData.pilotChartData"
+                ></line-chart>
               </div>
-            </b-col>
+            </div>
           </b-row>
         </b-container>
       </b-col>
       <b-col cols="6" class="my-col">
-        <b-container class="my-container">
-          <h4 class="title">Video</h4>
-        </b-container>
+        <div>
+          <Mapa class="mapa"/>
+        </div>
       </b-col>
     </b-row>
   </b-container>
@@ -95,6 +85,7 @@
 <script>
 import LineChart from "../components/LineChart";
 import { db } from "../firebaseMain";
+import Mapa from "../components/Mapa";
 
 class dataSet {
   constructor(label, bgColor, dataSet = []) {
@@ -108,6 +99,7 @@ class dataSet {
 
 export default {
   components: {
+    Mapa,
     LineChart,
   },
   data() {
@@ -115,8 +107,6 @@ export default {
       pilotData: {
         lastHeartRate: 0,
         lastOxigenLevel: 0,
-        lastTemperature: 0,
-        braceletBattery: 0,
         pilotChartData: {},
       },
       envData: {
@@ -140,8 +130,7 @@ export default {
     async getDataDB() {
       await db.once("value").then((snapshot) => {
         let records = snapshot.val();
-        const key = Object.getOwnPropertyNames(records)[0];
-        records = records[key];
+        console.log(records);
         const chartLabels = records["time_"];
         this.populatePilotData(records, chartLabels);
         this.populateEnvData(records, chartLabels);
@@ -206,7 +195,6 @@ export default {
         datasets: [
           new dataSet("Heart rate", "#454ade", records["pilot_heartRate"]),
           new dataSet("Oxigen level", "#facf63", records["pilot_oxigenLevel"]),
-          new dataSet("Temperature", "#f26f8b", records["pilot_temperature"]),
         ],
         options: {
           responsive: true,
@@ -220,18 +208,16 @@ export default {
         records["pilot_heartRate"][records["pilot_heartRate"].length - 1];
       this.pilotData.lastOxigenLevel =
         records["pilot_oxigenLevel"][records["pilot_oxigenLevel"].length - 1];
-      this.pilotData.lastTemperature =
-        records["pilot_temperature"][records["pilot_temperature"].length - 1];
-      this.pilotData.braceletBattery =
-        records["pilot_braceletBattery"][
-          records["pilot_braceletBattery"].length - 1
-        ];
     },
   },
 };
 </script>
 
 <style>
+.mapa {
+  height: 425px;
+}
+
 .title {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

@@ -16,38 +16,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
-var db = firebase.database().ref("record/");
+var db = firebase.database().ref("Records/");
 
-// collection references
-/*
-record = {
-  date : datetime,
-  enviroment : {
-    UV : float,
-    humidity : float,
-    pressure : float,
-    temperature : float
-  },
-  pilot : {
-    bracelet battery : float
-    heart rate : float,
-    oxigene level: float,
-    temperature: float
-  },
-  rover : {
-    GPS : [
-      0 : float,
-      1 : float,
-      2 : float
-    ],
-    RPM : float,
-    rover battery : float
-  }
-}
-*/
-//const records = db.collection('')
-
-// export utils/refs
 export {
-  db
+    db
 };
