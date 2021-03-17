@@ -4,9 +4,9 @@ const configMapa = {
     panControlOptions: false,
     gestureHandling: "cooperative",
     mapTypeControl: false,
-    zoom: 7,
-    minZoom: 3,
-    maxZoom: 9
+    zoom: 17,
+    minZoom: 0,
+    maxZoom: 18
 };
 
 export { configMapa };
