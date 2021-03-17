@@ -41,7 +41,7 @@
       </b-col>
       <b-col cols="6">
         <b-container>
-          <h4 class="title">Pilots health</h4>
+          <h4 class="title">Pilot's health</h4>
           <b-row>
             <b-col cols="6">
               <div class="shadow-lg p-3 mb-5 background-heart rounded">
