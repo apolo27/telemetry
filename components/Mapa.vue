@@ -24,6 +24,8 @@
   import { configMapa } from "@/constants/configMapa";
  
   export default {
+    props:["position"],
+
     components: {
       CargarMapa,
       Marcadores
@@ -31,18 +33,7 @@
  
     data() {
       return {
-        markers: [
-          {
-            id: "0",
-            position: { lat: -13.1583635, lng: -72.603623 },
-            title: "Machu Pichu - Cusco"
-          },
-          {
-            id: "1",
-            position: { lat: -12.025827, lng: -77.2679817 },
-            title: "Lima - Perú"
-          }
-        ]
+        markers: this.position
       };
     },
  

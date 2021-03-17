@@ -1,82 +1,139 @@
 <template>
   <b-container class="my-container">
     <b-row class="my-row">
+      <b-col cols='6'>
+        <b-container>
+        <b-row>
+          <b-col>
+            <h4 class="title">Rover's route</h4>
+            <div v-if="position.length != 0">
+              <Mapa v-bind:position='position' class="mapa"/>
+            </div>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="6">
+            <br/>
+            <h4 class="title">Rover's data</h4>
+            <div class="shadow-lg p-3 mb-5 background-heart rounded">
+              <p class="value-text color-white">
+                Speed:
+              </p>
+              <p class="value-text color-white">
+                {{roverData.lastSpeed}} m/s
+              </p>
+            </div>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <div class="shadow-lg p-3 mb-5 rounded">
+              <div id="myChartColor">
+                <line-chart
+                  :chart-data="roverData.roverSpeedData"
+                  :key="roverData.lastSpeed"
+                ></line-chart>
+              </div>
+            </div>
+          </b-col>
+        </b-row>
+      </b-container>
+      </b-col>
       <b-col cols="6">
         <b-container>
-          <h4 class="title">Salud de los pilotos</h4>
+          <h4 class="title">Pilot's health</h4>
           <b-row>
             <b-col cols="6">
               <div class="shadow-lg p-3 mb-5 background-heart rounded">
                 <p class="value-text color-white">
-                  {{0}} bpm
+                  Heart rate:
+                </p>
+                <p class="value-text color-white">
+                  {{pilotData.lastHeartRate}} bpm
                 </p>
               </div>
             </b-col>
             <b-col cols="6">
               <div class="shadow-lg p-3 mb-5 background-heart rounded">
                 <p class="value-text color-white">
-                  {{0}} bpm
+                  Oxygen (SpO2): 
+                </p>
+                <p class="value-text color-white">
+                  {{pilotData.lastOxigenLevel}}% 
                 </p>
               </div>
             </b-col>
           </b-row>
           <b-row>
-            <div class="shadow-lg p-3 mb-5 rounded">
-              <div id="myChartColor">
-                <line-chart
-                  :chart-data="pilotData.pilotChartData"
-                ></line-chart>
+            <b-col>
+              <div class="shadow-lg p-3 mb-5 rounded">
+                <div id="myChartColor">
+                  <line-chart
+                    :chart-data="pilotData.pilotChartData"
+                    :key='pilotData.lastOxigenLevel'
+                  ></line-chart>
+                </div>
               </div>
-            </div>
+            </b-col>
           </b-row>
-          <h4 class="title">Data del ambiente</h4>
+          <h4 class="title">Enviroment's data</h4>
           <b-row>
             <b-col cols="6">
               <div class="shadow-lg p-3 mb-5 background-heart rounded">
                 <p class="value-text color-white">
-                  {{0}} bpm
+                  Temperature:
+                </p>
+                <p class="value-text color-white">
+                  {{envData.lastTemperature}} °C
                 </p>
               </div>
             </b-col>
             <b-col cols="6">
               <div class="shadow-lg p-3 mb-5 background-heart rounded">
                 <p class="value-text color-white">
-                  {{0}} bpm
+                  Pressure:
                 </p>
-              </div>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="6">
-              <div class="shadow-lg p-3 mb-5 background-heart rounded">
                 <p class="value-text color-white">
-                  {{0}} bpm
-                </p>
-              </div>
-            </b-col>
-            <b-col cols="6">
-              <div class="shadow-lg p-3 mb-5 background-heart rounded">
-                <p class="value-text color-white">
-                  {{0}} bpm
+                  {{envData.lastPressure}} mb
                 </p>
               </div>
             </b-col>
           </b-row>
           <b-row>
-            <div class="shadow-lg p-3 mb-5 rounded">
-              <div id="myChartColor">
-                <line-chart
-                  :chart-data="pilotData.pilotChartData"
-                ></line-chart>
+            <b-col cols="6">
+              <div class="shadow-lg p-3 mb-5 background-heart rounded">
+                <p class="value-text color-white">
+                  Humidity:
+                </p>
+                <p class="value-text color-white">
+                  {{envData.lastHumidity}} %
+                </p>
               </div>
-            </div>
+            </b-col>
+            <b-col cols="6">
+              <div class="shadow-lg p-3 mb-5 background-heart rounded">
+                <p class="value-text color-white">
+                  UV intensity:
+                </p>
+                <p class="value-text color-white">
+                  {{envData.lastUv}} mW/cm2
+                </p>
+              </div>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <div class="shadow-lg p-3 mb-5 rounded">
+                <div id="myChartColor">
+                  <line-chart
+                    :chart-data="envData.envChartData"
+                    :key='envData.lastUv'
+                  ></line-chart>
+                </div>
+              </div>
+            </b-col>
           </b-row>
         </b-container>
-      </b-col>
-      <b-col cols="6" class="my-col">
-        <div>
-          <Mapa class="mapa"/>
-        </div>
       </b-col>
     </b-row>
   </b-container>
@@ -88,12 +145,13 @@ import { db } from "../firebaseMain";
 import Mapa from "../components/Mapa";
 
 class dataSet {
-  constructor(label, bgColor, dataSet = []) {
+  constructor(label, bgColor, dataSet = [], hidden = false) {
     this.label = label;
     // this.backgroundColor = "rgba(0, 0, 0, 0)";
     this.borderColor = bgColor;
     this.data = dataSet;
     this.hoverBackgroundColor = "#454ade";
+    this.hidden = hidden;
   }
 }
 
@@ -107,107 +165,116 @@ export default {
       pilotData: {
         lastHeartRate: 0,
         lastOxigenLevel: 0,
-        pilotChartData: {},
+        pilotChartData: {
+          labels: [],
+          datasets: [
+            new dataSet("Heart rate", "#454ade"),
+            new dataSet("Oxigen level", "#facf63", [], true),
+          ],
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            chartArea: {
+              backgroundColor: "#facf63",
+            },
+          },
+        },
       },
       envData: {
         lastHumidity: 0,
         lastPressure: 0,
         lastTemperature: 0,
-        lastuv: 0,
-        envChartData: {},
+        lastUv: 0,
+        envChartData:{
+          labels: [],
+          datasets: [
+            new dataSet("Temperature", "rgba(255, 0, 0, 1)"),
+            new dataSet("Pressure", "rgba(0, 0, 255, 1)", [], true),
+            new dataSet("Humidity", "rgba(0, 255, 0, 1)", [], true),
+            new dataSet("UV", "rgba(102, 51, 153, 1)", [], true),
+          ],
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+          },
+        },
       },
       roverData: {
-        gps: [],
-        battery: 0,
-        rpm: 0,
+        lastSpeed: 0,
+        roverSpeedData:{
+          labels: [],
+          datasets: [
+            new dataSet("Speed", "#454ade"),
+          ],
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            chartArea: {
+              backgroundColor: "#facf63",
+            },
+          },
+        },
       },
+      position:[],
+      count: 1
     };
   },
   mounted() {
-    this.getDataDB();
+    db.on("child_added", this.getDataDB);
   },
   methods: {
-    async getDataDB() {
-      await db.once("value").then((snapshot) => {
-        let records = snapshot.val();
-        console.log(records);
-        const chartLabels = records["time_"];
-        this.populatePilotData(records, chartLabels);
-        this.populateEnvData(records, chartLabels);
-        this.populateRoverData(records, chartLabels);
-      });
+    async getDataDB(snapshot) {
+      let record = snapshot.val();
+      this.populatePilotData(record, this.count);
+      this.populateEnvData(record, this.count);
+      this.populateRoverData(record, this.count);
+      this.count++;
     },
 
-    async populateEnvData(records, chartLabels) {
-      this.envData.envChartData = {
-        labels: chartLabels,
-        datasets: [
-          new dataSet(
-            "Temperature",
-            "rgba(255, 0, 0, 1)",
-            records["enviroment_temperature"]
-          ),
-          new dataSet(
-            "Pressure",
-            "rgba(0, 0, 255, 1)",
-            records["enviroment_pressure"]
-          ),
-          new dataSet(
-            "Humidity",
-            "rgba(0, 255, 0, 1)",
-            records["enviroment_humidity"]
-          ),
-          new dataSet("UV", "rgba(102, 51, 153, 1)", records["enviroment_uv"]),
-        ],
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-        },
-      };
-      this.envData.lastTemperature =
-        records["enviroment_temperature"][
-          records["enviroment_temperature"].length - 1
-        ];
-      this.envData.lastPressure =
-        records["enviroment_pressure"][
-          records["enviroment_pressure"].length - 1
-        ];
-      this.envData.lastHumidity =
-        records["enviroment_humidity"][
-          records["enviroment_humidity"].length - 1
-        ];
-      this.envData.lastuv =
-        records["enviroment_uv"][records["enviroment_uv"].length - 1];
+    async populateEnvData(record, count) {
+      this.envData.envChartData.labels.push(count);
+      if(this.envData.envChartData.labels.length > 30) this.envData.envChartData.labels.splice(0,1);
+      this.envData.envChartData.datasets[0].data.push(record['temperature']);
+      if(this.envData.envChartData.datasets[0].data.length > 30) this.envData.envChartData.datasets[0].data.splice(0,1);
+      this.envData.envChartData.datasets[1].data.push(record['pressure']);
+      if(this.envData.envChartData.datasets[1].data.length > 30) this.envData.envChartData.datasets[1].data.splice(0,1);
+      this.envData.envChartData.datasets[2].data.push(record['humidity']);
+      if(this.envData.envChartData.datasets[2].data.length > 30) this.envData.envChartData.datasets[2].data.splice(0,1);
+      this.envData.envChartData.datasets[3].data.push(record['uv_intensity']);
+      if(this.envData.envChartData.datasets[3].data.length > 30) this.envData.envChartData.datasets[3].data.splice(0,1);
+      this.envData.lastTemperature = record['temperature'];
+      this.envData.lastPressure = record['pressure'];
+      this.envData.lastHumidity = record['humidity'];
+      this.envData.lastUv = record['uv_intensity'];
     },
 
-    async populateRoverData(records, chartLabels) {
-      this.roverData.gps =
-        records["rover_gps"][records["rover_gps"].length - 1];
-      this.roverData.battery =
-        records["rover_roverBattery"][records["rover_roverBattery"].length - 1];
-      this.roverData.rpm =
-        records["rover_rpm"][records["rover_rpm"].length - 1];
-    },
-
-    async populatePilotData(records, chartLabels) {
-      this.pilotData.pilotChartData = {
-        labels: chartLabels,
-        datasets: [
-          new dataSet("Heart rate", "#454ade", records["pilot_heartRate"]),
-          new dataSet("Oxigen level", "#facf63", records["pilot_oxigenLevel"]),
-        ],
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          chartArea: {
-            backgroundColor: "#facf63",
+    async populateRoverData(record, count) {
+      this.roverData.roverSpeedData.labels.push(count);
+      if(this.roverData.roverSpeedData.labels.length > 30) this.roverData.roverSpeedData.labels.splice(0,1);
+      this.roverData.roverSpeedData.datasets[0].data.push(record['speed'])
+      if(this.roverData.roverSpeedData.datasets[0].data.length > 30) this.roverData.roverSpeedData.datasets[0].data.splice(0,1);
+      this.roverData.lastSpeed = record['speed'];
+      this.position.push(
+        {
+          id: count.toString(),
+          position: {
+            lat:record['position'][0],
+            lng:record['position'][1]
           },
-        },
-      };
-      this.pilotData.lastHeartRate =
-        records["pilot_heartRate"][records["pilot_heartRate"].length - 1];
-      this.pilotData.lastOxigenLevel =
-        records["pilot_oxigenLevel"][records["pilot_oxigenLevel"].length - 1];
+          title:`Position ${count} of rover`
+        }
+      )
+    },
+
+    async populatePilotData(record, count) {
+      this.pilotData.pilotChartData.labels.push(count);
+      if(this.pilotData.pilotChartData.labels.length > 30) this.pilotData.pilotChartData.labels.splice(0,1); 
+      this.pilotData.pilotChartData.datasets[0].data.push(record["oxygen"]);
+      if(this.pilotData.pilotChartData.datasets[0].data.length > 30) this.pilotData.pilotChartData.datasets[0].data.splice(0,1);
+      this.pilotData.pilotChartData.datasets[1].data.push(record["heartRate"]);
+      if(this.pilotData.pilotChartData.datasets[1].data.length > 30) this.pilotData.pilotChartData.datasets[1].data.splice(0,1);
+      this.pilotData.lastHeartRate = record["oxygen"];
+      this.pilotData.lastOxigenLevel = record["heartRate"];
     },
   },
 };
@@ -215,7 +282,7 @@ export default {
 
 <style>
 .mapa {
-  height: 425px;
+  height: 615px;
 }
 
 .title {
