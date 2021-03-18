@@ -1,43 +1,44 @@
 <template>
   <b-container class="my-container">
+    <b-row class="my-row justify-content-center">
+      <h4 class="title" style="padding-bottom: 30px">Telemetry</h4>
+    </b-row>
     <b-row class="my-row">
-      <b-col cols='6'>
+      <b-col cols="6">
         <b-container>
-        <b-row>
-          <b-col>
-            <h4 class="title">Rover's route</h4>
-            <div v-if="position.length != 0">
-              <Mapa v-bind:position='position' class="mapa"/>
-            </div>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col cols="6">
-            <br/>
-            <h4 class="title">Rover's data</h4>
-            <div class="shadow-lg p-3 mb-5 background-heart rounded">
-              <p class="value-text color-white">
-                Speed:
-              </p>
-              <p class="value-text color-white">
-                {{roverData.lastSpeed}} m/s
-              </p>
-            </div>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <div class="shadow-lg p-3 mb-5 rounded">
-              <div id="myChartColor">
-                <line-chart
-                  :chart-data="roverData.roverSpeedData"
-                  :key="roverData.lastSpeed"
-                ></line-chart>
+          <b-row>
+            <b-col>
+              <h4 class="title">Rover's route</h4>
+              <div v-if="position.length != 0">
+                <div class="shadow-lg p-3 mb-5 rounded">
+                  <Mapa v-bind:position="position" class="mapa" />
+                </div>
               </div>
-            </div>
-          </b-col>
-        </b-row>
-      </b-container>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="6">
+              <br />
+              <h4 class="title">Rover's data</h4>
+              <div class="shadow-lg p-3 mb-5 background-red rounded">
+                <p class="value-text">Speed:</p>
+                <p class="value-text">{{ roverData.lastSpeed }} m/s</p>
+              </div>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <div class="shadow-lg p-3 mb-5 rounded">
+                <div id="myChartColor">
+                  <line-chart
+                    :chart-data="roverData.roverSpeedData"
+                    :key="roverData.lastSpeed"
+                  ></line-chart>
+                </div>
+              </div>
+            </b-col>
+          </b-row>
+        </b-container>
       </b-col>
       <b-col cols="6">
         <b-container>
@@ -45,22 +46,14 @@
           <b-row>
             <b-col cols="6">
               <div class="shadow-lg p-3 mb-5 background-heart rounded">
-                <p class="value-text color-white">
-                  Heart rate:
-                </p>
-                <p class="value-text color-white">
-                  {{pilotData.lastHeartRate}} bpm
-                </p>
+                <p class="value-text">Heart rate:</p>
+                <p class="value-text">{{ pilotData.lastHeartRate }} bpm</p>
               </div>
             </b-col>
             <b-col cols="6">
-              <div class="shadow-lg p-3 mb-5 background-heart rounded">
-                <p class="value-text color-white">
-                  Oxygen (SpO2): 
-                </p>
-                <p class="value-text color-white">
-                  {{pilotData.lastOxigenLevel}}% 
-                </p>
+              <div class="shadow-lg p-3 mb-5 background-yellow rounded">
+                <p class="value-text">Oxygen (SpO2):</p>
+                <p class="value-text">{{ pilotData.lastOxigenLevel }}%</p>
               </div>
             </b-col>
           </b-row>
@@ -70,7 +63,7 @@
                 <div id="myChartColor">
                   <line-chart
                     :chart-data="pilotData.pilotChartData"
-                    :key='pilotData.lastOxigenLevel'
+                    :key="pilotData.lastOxigenLevel"
                   ></line-chart>
                 </div>
               </div>
@@ -79,45 +72,29 @@
           <h4 class="title">Enviroment's data</h4>
           <b-row>
             <b-col cols="6">
-              <div class="shadow-lg p-3 mb-5 background-heart rounded">
-                <p class="value-text color-white">
-                  Temperature:
-                </p>
-                <p class="value-text color-white">
-                  {{envData.lastTemperature}} °C
-                </p>
+              <div class="shadow-lg p-3 mb-5 background-orange rounded">
+                <p class="value-text">Temperature:</p>
+                <p class="value-text">{{ envData.lastTemperature }} °C</p>
               </div>
             </b-col>
             <b-col cols="6">
-              <div class="shadow-lg p-3 mb-5 background-heart rounded">
-                <p class="value-text color-white">
-                  Pressure:
-                </p>
-                <p class="value-text color-white">
-                  {{envData.lastPressure}} mb
-                </p>
+              <div class="shadow-lg p-3 mb-5 background-green rounded">
+                <p class="value-text">Pressure:</p>
+                <p class="value-text">{{ envData.lastPressure }} mb</p>
               </div>
             </b-col>
           </b-row>
           <b-row>
             <b-col cols="6">
-              <div class="shadow-lg p-3 mb-5 background-heart rounded">
-                <p class="value-text color-white">
-                  Humidity:
-                </p>
-                <p class="value-text color-white">
-                  {{envData.lastHumidity}} %
-                </p>
+              <div class="shadow-lg p-3 mb-5 background-blue rounded">
+                <p class="value-text">Humidity:</p>
+                <p class="value-text">{{ envData.lastHumidity }} %</p>
               </div>
             </b-col>
             <b-col cols="6">
-              <div class="shadow-lg p-3 mb-5 background-heart rounded">
-                <p class="value-text color-white">
-                  UV intensity:
-                </p>
-                <p class="value-text color-white">
-                  {{envData.lastUv}} mW/cm2
-                </p>
+              <div class="shadow-lg p-3 mb-5 background-yellow rounded">
+                <p class="value-text">UV intensity:</p>
+                <p class="value-text">{{ envData.lastUv }} mW/cm2</p>
               </div>
             </b-col>
           </b-row>
@@ -127,7 +104,7 @@
                 <div id="myChartColor">
                   <line-chart
                     :chart-data="envData.envChartData"
-                    :key='envData.lastUv'
+                    :key="envData.lastUv"
                   ></line-chart>
                 </div>
               </div>
@@ -147,7 +124,6 @@ import Mapa from "../components/Mapa";
 class dataSet {
   constructor(label, bgColor, dataSet = [], hidden = false) {
     this.label = label;
-    // this.backgroundColor = "rgba(0, 0, 0, 0)";
     this.borderColor = bgColor;
     this.data = dataSet;
     this.hoverBackgroundColor = "#454ade";
@@ -185,13 +161,13 @@ export default {
         lastPressure: 0,
         lastTemperature: 0,
         lastUv: 0,
-        envChartData:{
+        envChartData: {
           labels: [],
           datasets: [
-            new dataSet("Temperature", "rgba(255, 0, 0, 1)"),
-            new dataSet("Pressure", "rgba(0, 0, 255, 1)", [], true),
-            new dataSet("Humidity", "rgba(0, 255, 0, 1)", [], true),
-            new dataSet("UV", "rgba(102, 51, 153, 1)", [], true),
+            new dataSet("Temperature", "#e77716"),
+            new dataSet("Pressure", "#3eb04b", [], true),
+            new dataSet("Humidity", "#3064ff", [], true),
+            new dataSet("UV", "#facf63", [], true),
           ],
           options: {
             responsive: true,
@@ -201,11 +177,9 @@ export default {
       },
       roverData: {
         lastSpeed: 0,
-        roverSpeedData:{
+        roverSpeedData: {
           labels: [],
-          datasets: [
-            new dataSet("Speed", "#454ade"),
-          ],
+          datasets: [new dataSet("Speed", "#d00d1a")],
           options: {
             responsive: true,
             maintainAspectRatio: false,
@@ -215,8 +189,8 @@ export default {
           },
         },
       },
-      position:[],
-      count: 1
+      position: [],
+      count: 1,
     };
   },
   mounted() {
@@ -233,46 +207,55 @@ export default {
 
     async populateEnvData(record, count) {
       this.envData.envChartData.labels.push(count);
-      if(this.envData.envChartData.labels.length > 30) this.envData.envChartData.labels.splice(0,1);
-      this.envData.envChartData.datasets[0].data.push(record['temperature']);
-      if(this.envData.envChartData.datasets[0].data.length > 30) this.envData.envChartData.datasets[0].data.splice(0,1);
-      this.envData.envChartData.datasets[1].data.push(record['pressure']);
-      if(this.envData.envChartData.datasets[1].data.length > 30) this.envData.envChartData.datasets[1].data.splice(0,1);
-      this.envData.envChartData.datasets[2].data.push(record['humidity']);
-      if(this.envData.envChartData.datasets[2].data.length > 30) this.envData.envChartData.datasets[2].data.splice(0,1);
-      this.envData.envChartData.datasets[3].data.push(record['uv_intensity']);
-      if(this.envData.envChartData.datasets[3].data.length > 30) this.envData.envChartData.datasets[3].data.splice(0,1);
-      this.envData.lastTemperature = record['temperature'];
-      this.envData.lastPressure = record['pressure'];
-      this.envData.lastHumidity = record['humidity'];
-      this.envData.lastUv = record['uv_intensity'];
+      if (this.envData.envChartData.labels.length > 30)
+        this.envData.envChartData.labels.splice(0, 1);
+      this.envData.envChartData.datasets[0].data.push(record["temperature"]);
+      if (this.envData.envChartData.datasets[0].data.length > 30)
+        this.envData.envChartData.datasets[0].data.splice(0, 1);
+      this.envData.envChartData.datasets[1].data.push(record["pressure"]);
+      if (this.envData.envChartData.datasets[1].data.length > 30)
+        this.envData.envChartData.datasets[1].data.splice(0, 1);
+      this.envData.envChartData.datasets[2].data.push(record["humidity"]);
+      if (this.envData.envChartData.datasets[2].data.length > 30)
+        this.envData.envChartData.datasets[2].data.splice(0, 1);
+      this.envData.envChartData.datasets[3].data.push(record["uv_intensity"]);
+      if (this.envData.envChartData.datasets[3].data.length > 30)
+        this.envData.envChartData.datasets[3].data.splice(0, 1);
+
+      this.envData.lastTemperature = record["temperature"];
+      this.envData.lastPressure = record["pressure"];
+      this.envData.lastHumidity = record["humidity"];
+      this.envData.lastUv = record["uv_intensity"];
     },
 
     async populateRoverData(record, count) {
       this.roverData.roverSpeedData.labels.push(count);
-      if(this.roverData.roverSpeedData.labels.length > 30) this.roverData.roverSpeedData.labels.splice(0,1);
-      this.roverData.roverSpeedData.datasets[0].data.push(record['speed'])
-      if(this.roverData.roverSpeedData.datasets[0].data.length > 30) this.roverData.roverSpeedData.datasets[0].data.splice(0,1);
-      this.roverData.lastSpeed = record['speed'];
-      this.position.push(
-        {
-          id: count.toString(),
-          position: {
-            lat:record['position'][0],
-            lng:record['position'][1]
-          },
-          title:`Position ${count} of rover`
-        }
-      )
+      if (this.roverData.roverSpeedData.labels.length > 30)
+        this.roverData.roverSpeedData.labels.splice(0, 1);
+      this.roverData.roverSpeedData.datasets[0].data.push(record["speed"]);
+      if (this.roverData.roverSpeedData.datasets[0].data.length > 30)
+        this.roverData.roverSpeedData.datasets[0].data.splice(0, 1);
+      this.roverData.lastSpeed = record["speed"];
+      this.position.push({
+        id: count.toString(),
+        position: {
+          lat: record["position"][0],
+          lng: record["position"][1],
+        },
+        title: `Position ${count} of rover`,
+      });
     },
 
     async populatePilotData(record, count) {
       this.pilotData.pilotChartData.labels.push(count);
-      if(this.pilotData.pilotChartData.labels.length > 30) this.pilotData.pilotChartData.labels.splice(0,1); 
+      if (this.pilotData.pilotChartData.labels.length > 30)
+        this.pilotData.pilotChartData.labels.splice(0, 1);
       this.pilotData.pilotChartData.datasets[0].data.push(record["oxygen"]);
-      if(this.pilotData.pilotChartData.datasets[0].data.length > 30) this.pilotData.pilotChartData.datasets[0].data.splice(0,1);
+      if (this.pilotData.pilotChartData.datasets[0].data.length > 30)
+        this.pilotData.pilotChartData.datasets[0].data.splice(0, 1);
       this.pilotData.pilotChartData.datasets[1].data.push(record["heartRate"]);
-      if(this.pilotData.pilotChartData.datasets[1].data.length > 30) this.pilotData.pilotChartData.datasets[1].data.splice(0,1);
+      if (this.pilotData.pilotChartData.datasets[1].data.length > 30)
+        this.pilotData.pilotChartData.datasets[1].data.splice(0, 1);
       this.pilotData.lastHeartRate = record["oxygen"];
       this.pilotData.lastOxigenLevel = record["heartRate"];
     },
@@ -294,24 +277,9 @@ export default {
   font-size: 24px;
   color: #fafafa;
 }
-.subtitle {
-  font-family: "Segoe UI", Roboto;
-  font-size: 18px;
-  color: #fafafa;
-  word-spacing: 1px;
-  padding-bottom: 15px;
-}
+
 body {
   margin: 30px;
-}
-.small {
-  max-width: 600px;
-}
-.btn-a27 {
-  background-color: transparent;
-  border-radius: 10px;
-  padding: 10px 20px;
-  color: #28313a;
 }
 
 .value-text {
@@ -319,43 +287,31 @@ body {
   font-family: "Segoe UI", Roboto;
   font-size: 25px;
   font-weight: bold;
-}
-.color-heart {
-  color: #454ade;
-}
-
-.color-white {
   color: #fafafa;
 }
-.color-spo2 {
-  color: #facf63;
+
+.background-red {
+  background: #d00d1a;
 }
-.color-body-t {
-  color: #f26f8b;
-}
-.color-atmospheric-p {
-  color: #3064ff;
-}
-.color-humity {
-  color: #3eb04b;
-}
-.color-tempeture {
-  color: #e77716;
+.background-orange {
+  background: #e77716;
 }
 
+.background-green {
+  background: #3eb04b;
+}
+
+.background-blue {
+  background: #3064ff;
+}
 .background-heart {
   background: #454ade;
 }
-
-.background-spo2 {
+.background-yellow {
   background: #facf63;
 }
-.background-body-t {
+.background-pressure {
   background: #f26f8b;
-}
-
-.background-atmospheric-p {
-  background: #3064ff;
 }
 
 #myChartColor {
