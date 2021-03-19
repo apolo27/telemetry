@@ -199,14 +199,13 @@ export default {
   methods: {
     async getDataDB(snapshot) {
       let record = snapshot.val();
-      this.populatePilotData(record, this.count);
-      this.populateEnvData(record, this.count);
-      this.populateRoverData(record, this.count);
-      this.count++;
+      this.populatePilotData(record);
+      this.populateEnvData(record);
+      this.populateRoverData(record);
     },
 
-    async populateEnvData(record, count) {
-      this.envData.envChartData.labels.push(count);
+    async populateEnvData(record) {
+      this.envData.envChartData.labels.push(record["time"]);
       if (this.envData.envChartData.labels.length > 30)
         this.envData.envChartData.labels.splice(0, 1);
       this.envData.envChartData.datasets[0].data.push(record["temperature"]);
@@ -224,12 +223,12 @@ export default {
 
       this.envData.lastTemperature = record["temperature"];
       this.envData.lastPressure = record["pressure"];
-      this.envData.lastHumidity = record["humidity"];
+      this.envData.lastHumidity = record["humidity"] * 100;
       this.envData.lastUv = record["uv_intensity"];
     },
 
-    async populateRoverData(record, count) {
-      this.roverData.roverSpeedData.labels.push(count);
+    async populateRoverData(record) {
+      this.roverData.roverSpeedData.labels.push(record["time"]);
       if (this.roverData.roverSpeedData.labels.length > 30)
         this.roverData.roverSpeedData.labels.splice(0, 1);
       this.roverData.roverSpeedData.datasets[0].data.push(record["speed"]);
@@ -237,27 +236,28 @@ export default {
         this.roverData.roverSpeedData.datasets[0].data.splice(0, 1);
       this.roverData.lastSpeed = record["speed"];
       this.position.push({
-        id: count.toString(),
+        id: this.count.toString(),
         position: {
           lat: record["position"][0],
           lng: record["position"][1],
         },
-        title: `Position ${count} of rover`,
+        title: `Position ${this.count} of rover`,
       });
+      this.count++;
     },
 
-    async populatePilotData(record, count) {
-      this.pilotData.pilotChartData.labels.push(count);
+    async populatePilotData(record) {
+      this.pilotData.pilotChartData.labels.push(record["time"]);
       if (this.pilotData.pilotChartData.labels.length > 30)
         this.pilotData.pilotChartData.labels.splice(0, 1);
-      this.pilotData.pilotChartData.datasets[0].data.push(record["oxygen"]);
+      this.pilotData.pilotChartData.datasets[0].data.push(record["heartRate"]);
       if (this.pilotData.pilotChartData.datasets[0].data.length > 30)
         this.pilotData.pilotChartData.datasets[0].data.splice(0, 1);
-      this.pilotData.pilotChartData.datasets[1].data.push(record["heartRate"]);
+      this.pilotData.pilotChartData.datasets[1].data.push(record["oxygen"]);
       if (this.pilotData.pilotChartData.datasets[1].data.length > 30)
         this.pilotData.pilotChartData.datasets[1].data.splice(0, 1);
-      this.pilotData.lastHeartRate = record["oxygen"];
-      this.pilotData.lastOxigenLevel = record["heartRate"];
+      this.pilotData.lastHeartRate = record["heartRate"];
+      this.pilotData.lastOxigenLevel = record["oxygen"] * 100;
     },
   },
 };
