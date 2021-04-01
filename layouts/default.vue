@@ -6,7 +6,7 @@
 
 <style>
 .background-test {
-  background: #323232;
+  background: #000;
 }
 html {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -18,7 +18,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-  background: #323232;
+  background: #000;
 }
 
 *,
