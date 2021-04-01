@@ -1,0 +1,20 @@
+{
+  "BarChart": {
+    "description": "Auto imported from components/BarChart.js"
+  },
+  "CargarMapa": {
+    "description": "Auto imported from components/CargarMapa.vue"
+  },
+  "LineChart": {
+    "description": "Auto imported from components/LineChart.js"
+  },
+  "Logo": {
+    "description": "Auto imported from components/Logo.vue"
+  },
+  "Mapa": {
+    "description": "Auto imported from components/Mapa.vue"
+  },
+  "Marcadores": {
+    "description": "Auto imported from components/Marcadores.vue"
+  }
+}
