@@ -24,9 +24,10 @@
               <div style="text-align: center">
                 <h4 class="title">Rover's data</h4>
               </div>
-              <div class="shadow-lg p-3 mb-3 rounded" style="background: white">
-                <p class="value-text" style="color: black">Speed:</p>
-                <p class="value-text" style="color: black">{{ roverData.lastSpeed }} m/s</p>
+              <!-- style="border: 2px solid white" -->
+              <div class="shadow-lg p-1 mb-3" >
+                <p class="value-text" style="color: white">Last measured speed:</p>
+                <p class="value-text" style="color: white">{{ roverData.lastSpeed }} m/s</p>
               </div>
             </b-col>
           </b-row>
@@ -94,13 +95,13 @@
           </div>
           <b-row>
             <b-col cols="6">
-              <div class="shadow-lg p-3 mb-4 background-blue rounded">
+              <div class="shadow-lg p-1 mb-4 background-blue">
                 <p class="value-text">Temperature:</p>
                 <p class="value-text">{{ envData.lastTemperature }} °C</p>
               </div>
             </b-col>
             <b-col cols="6">
-              <div class="shadow-lg p-3 mb-4 background-red rounded">
+              <div class="shadow-lg p-1 mb-4 background-red">
                 <p class="value-text">Pressure:</p>
                 <p class="value-text">{{ envData.lastPressure }} mb</p>
               </div>
@@ -108,13 +109,13 @@
           </b-row>
           <b-row>
             <b-col cols="6">
-              <div class="shadow-lg p-3 mb-3 background-red rounded">
+              <div class="shadow-lg p-1 mb-3 background-red">
                 <p class="value-text">Humidity:</p>
                 <p class="value-text">{{ envData.lastHumidity }} %</p>
               </div>
             </b-col>
             <b-col cols="6">
-              <div class="shadow-lg p-3 mb-3 background-blue rounded">
+              <div class="shadow-lg p-1 mb-3 background-blue">
                 <p class="value-text">UV intensity:</p>
                 <p class="value-text">{{ envData.lastUv }} mW/cm2</p>
               </div>
@@ -196,7 +197,7 @@ export default {
         heartrate: {
           labels: [],
           datasets: [
-            new dataSet("Heart rate", "#454ade"),
+            new dataSet("Heart rate", "#FF0000"),
           ],
           options: {
             responsive: true,
@@ -206,14 +207,11 @@ export default {
         oxigen: {
           labels: [],
           datasets: [
-            new dataSet("Oxigen level", "#facf63")
+            new dataSet("Oxigen level", "#FFFFFF")
           ],
           options: {
             responsive: true,
-            maintainAspectRatio: false,
-            chartArea: {
-              backgroundColor: "#facf63",
-            },
+            maintainAspectRatio: false
           }
         }
       },
@@ -287,13 +285,17 @@ export default {
   methods: {
     async getDataDB(snapshot) {
       let record = snapshot.val();
+
+      // Cambiando formato de fecha
+      const tempDate = new Date(record["time"]);
+      record["time"] = tempDate.toLocaleTimeString();
+      
       this.populatePilotData(record);
       this.populateEnvData(record);
       this.populateRoverData(record);
     },
 
-    async populateEnvData(record) {
-
+    async populateEnvData(record) {      
       // Popular temperatura
       this.envData.temperature.labels.push(record["time"]);
 
@@ -350,6 +352,11 @@ export default {
     },
 
     async populateRoverData(record) {
+
+      // // Cambiando formato de fecha
+      // const tempDate = new Date(record["time"]);
+      // record["time"] = tempDate.toLocaleTimeString();
+
       this.roverData.roverSpeedData.labels.push(record["time"]);
       if (this.roverData.roverSpeedData.labels.length > 30)
         this.roverData.roverSpeedData.labels.splice(0, 1);
@@ -370,6 +377,10 @@ export default {
 
     async populatePilotData(record) {
 
+      // // Cambiando formato de fecha
+      // const tempDate = new Date(record["time"]);
+      // record["time"] = tempDate.toLocaleTimeString()
+
       // Popular pulso cardiaco
       this.pilotData.heartrate.labels.push(record["time"]);
       
@@ -383,6 +394,7 @@ export default {
         this.pilotData.heartrate.datasets[0].data.splice(0, 1);
       }
 
+
       // Popular oxigeno
       this.pilotData.oxigen.labels.push(record["time"]);
       
@@ -395,7 +407,6 @@ export default {
       if (this.pilotData.oxigen.datasets[0].data.length > 30) {
         this.pilotData.oxigen.datasets[0].data.splice(0, 1);
       }
-      console.log(record)
 
       // this.pilotData.pilotChartData.datasets[1].data.push(record["oxygen"]);
       // if (this.pilotData.pilotChartData.datasets[1].data.length > 30)
@@ -436,12 +447,14 @@ body {
   text-align: center;
   font-family: "Segoe UI", Roboto;
   font-size: 20px;
+  margin-bottom: 0px;
   /* font-weight: bold; */
   color: #fafafa;
 }
 
 .background-red {
-  background: #d00d1a;
+  /* background: #d00d1a; */
+  border: 2px solid #d00d1a;
 }
 .background-orange {
   background: #e77716;
@@ -452,7 +465,8 @@ body {
 }
 
 .background-blue {
-  background: #3064ff;
+  /* background: #3064ff; */
+  border: 2px solid #3064ff;
 }
 .background-heart {
   background: #454ade;
