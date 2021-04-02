@@ -127,7 +127,7 @@
                 <div id="myChartColor">
                   <line-chart
                     :chart-data="envData.temperature"
-                    :key="envData.lastUv"
+                    :key="envData.lastTemperature"
                   ></line-chart>
                 </div>
               </div>
@@ -137,7 +137,7 @@
                 <div id="myChartColor">
                   <line-chart
                     :chart-data="envData.pressure"
-                    :key="envData.lastUv"
+                    :key="envData.lastPressure"
                   ></line-chart>
                 </div>
               </div>
@@ -147,7 +147,7 @@
                 <div id="myChartColor">
                   <line-chart
                     :chart-data="envData.humidity"
-                    :key="envData.lastUv"
+                    :key="envData.lastHumidity"
                   ></line-chart>
                 </div>
               </div>
@@ -347,7 +347,7 @@ export default {
 
       this.envData.lastTemperature = record["temperature"];
       this.envData.lastPressure = record["pressure"];
-      this.envData.lastHumidity = record["humidity"] * 100;
+      this.envData.lastHumidity = record["humidity"];
       this.envData.lastUv = record["uv_intensity"];
     },
 
@@ -408,11 +408,8 @@ export default {
         this.pilotData.oxigen.datasets[0].data.splice(0, 1);
       }
 
-      // this.pilotData.pilotChartData.datasets[1].data.push(record["oxygen"]);
-      // if (this.pilotData.pilotChartData.datasets[1].data.length > 30)
-      //   this.pilotData.pilotChartData.datasets[1].data.splice(0, 1);
-      // this.pilotData.lastHeartRate = record["heartRate"];
-      // this.pilotData.lastOxigenLevel = record["oxygen"] * 100;
+      this.pilotData.lastHeartRate = record["heartRate"];
+      this.pilotData.lastOxigenLevel = record["oxygen"] * 100;
     },
   },
 };

@@ -4,7 +4,7 @@ const configMapa = {
     panControlOptions: false,
     gestureHandling: "cooperative",
     mapTypeControl: false,
-    zoom: 17,
+    zoom: 11,
     minZoom: 0,
     maxZoom: 18,
     styles: [
