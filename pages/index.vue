@@ -408,7 +408,7 @@ export default {
         this.pilotData.oxigen.datasets[0].data.splice(0, 1);
       }
 
-      this.pilotData.lastHeartRate = record["heartRate"];
+      this.pilotData.lastHeartRate = record["heart_rate"];
       this.pilotData.lastOxigenLevel = record["oxygen"] * 100;
     },
   },
