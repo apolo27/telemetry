@@ -37,7 +37,7 @@
                 <div id="myChartColor">
                   <line-chart
                     :chart-data="roverData.roverSpeedData"
-                    :key="roverData.lastSpeed"
+                    :key="tiempo"
                   >
                   </line-chart>
                 </div>
@@ -72,7 +72,7 @@
                 <div>
                   <line-chart
                     :chart-data="pilotData.heartrate"
-                    :key="pilotData.lastHeartRate"
+                    :key="tiempo"
                   ></line-chart>
                 </div>
               </div>
@@ -83,7 +83,7 @@
                 <div>
                   <line-chart
                     :chart-data="pilotData.oxigen"
-                    :key="pilotData.lastOxigenLevel"
+                    :key="tiempo"
                   ></line-chart>
                 </div>
               </div>
@@ -127,7 +127,7 @@
                 <div id="myChartColor">
                   <line-chart
                     :chart-data="envData.temperature"
-                    :key="envData.lastTemperature"
+                    :key="tiempo"
                   ></line-chart>
                 </div>
               </div>
@@ -137,7 +137,7 @@
                 <div id="myChartColor">
                   <line-chart
                     :chart-data="envData.pressure"
-                    :key="envData.lastPressure"
+                    :key="tiempo"
                   ></line-chart>
                 </div>
               </div>
@@ -147,7 +147,7 @@
                 <div id="myChartColor">
                   <line-chart
                     :chart-data="envData.humidity"
-                    :key="envData.lastHumidity"
+                    :key="tiempo"
                   ></line-chart>
                 </div>
               </div>
@@ -157,7 +157,7 @@
                 <div id="myChartColor">
                   <line-chart
                     :chart-data="envData.uv"
-                    :key="envData.lastUv"
+                    :key="tiempo"
                   ></line-chart>
                 </div>
               </div>
@@ -191,6 +191,7 @@ export default {
   },
   data() {
     return {
+      tiempo: '',
       pilotData: {
         lastHeartRate: 0,
         lastOxigenLevel: 0,
@@ -293,6 +294,9 @@ export default {
       this.populatePilotData(record);
       this.populateEnvData(record);
       this.populateRoverData(record);
+
+
+      this.tiempo = record["time"]
     },
 
     async populateEnvData(record) {      
@@ -407,9 +411,9 @@ export default {
       if (this.pilotData.oxigen.datasets[0].data.length > 30) {
         this.pilotData.oxigen.datasets[0].data.splice(0, 1);
       }
-
+      // console.log(record["heart_rate"])
       this.pilotData.lastHeartRate = record["heart_rate"];
-      this.pilotData.lastOxigenLevel = record["oxygen"] * 100;
+      this.pilotData.lastOxigenLevel = record["oxygen"];
     },
   },
 };
